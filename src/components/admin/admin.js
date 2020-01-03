@@ -1,5 +1,8 @@
 import React from 'react';
+import Header from '../header/header';
+import Footer from '../footer/footer';
 import QuestionSet from '../questionset/questionset'
+import './admin.css'
 
 class Admin extends React.Component{
 
@@ -28,6 +31,8 @@ class Admin extends React.Component{
         console.log(this.state);
         return(
       <div>
+          <Header />
+          <div className="bodyAdmin">
         <table>
           <tbody>
             {this.state.rows.map(row => (
@@ -37,14 +42,16 @@ class Admin extends React.Component{
             ))}
             <tr>
               <button className="" onClick={this.handleAddRow}>
-                (+)
+                +
               </button>
               {Boolean(this.state.rows.length) && (
-                <button onClick={this.handleRemoveRow}>(-)</button>
+                <button onClick={this.handleRemoveRow}>-</button>
               )}
             </tr>
           </tbody>
         </table>
+        </div>
+        <Footer />
       </div>
     );
     }

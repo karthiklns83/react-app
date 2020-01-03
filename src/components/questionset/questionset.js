@@ -11,7 +11,21 @@ class QuestionSet extends React.Component{
               type="text"
               placeholder="Enter your username"
             />
-
+            <button type="button">-</button>
+            <label htmlFor="question" >Question</label>
+            <input
+              name="question"
+              type="text"
+              placeholder="Enter your Question"
+            />
+            <button type="button">-</button>
+            <label htmlFor="answer" >Answer</label>
+            <input
+              name="answer"
+              type="text"
+              placeholder="Enter your Answer"
+            />
+            <button type="button">-</button>
           </div>
         );
     }
