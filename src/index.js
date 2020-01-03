@@ -16,7 +16,7 @@ ReactDOM.render(
 <Route exact path = "/" component = {(props) => <App {...props}/>} />
 <Route exact path = "/home" component = {(props) => <Home {...props}/>} />
 <Route exact path = "/error" component = {(props) => <ErrorPage {...props}/>} />
-<Route exact path = "/admin" component = {(props) => <TestComp {...props}/>} />
+<Route exact path = "/admin" component = {(props) => <Admin {...props}/>} />
 <Route exact path = "/logout" component = {(props) => <App {...props}/>} />
 <Route exact path = "/settings" component = {(props) => <Settings {...props}/>} />
 </Switch>

@@ -5,16 +5,17 @@ class TestComp extends React.Component {
         super(props);
         this.state = {
             questionset: [],
-            question: [],
+            question: ["test"],
             answer: []
         };
+        this.createQuestion = this.createQuestion.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     addClick() {
         this.setState(prevState => ({
             questionset: [...prevState.questionset, {questionset: ""}],
-            question: [...prevState.question, {question: ""}],
+            question: [...prevState.question, {question: "test"}],
             answer: [...prevState.answer, {answer: ""}]
         }))
     }
@@ -22,7 +23,12 @@ class TestComp extends React.Component {
     createQuestionSet() {
         return this.state.questionset.map((el, i) => (
             <div key={i}>
-                <input placeholder="Add a question set" name="questionset" value={el.questionset || ''} onChange={this.handleChange.bind(this, i)} />
+                <div><input placeholder="Add a question set" name="questionset" value={el.questionset || ''} onChange={this.handleChange.bind(this, i)} /></div>
+                <div><input placeholder="Add a question" name="question" value={el.question || ''} onChange={this.handleChange.bind(this, i)} />
+                <button type="button" onClick={this.createQuestion.bind(this)}> + </button><button type="button"> - </button>
+                </div>
+                <div><input placeholder="Add an Answer" name="answer" value={el.answer || ''} onChange={this.handleChange.bind(this, i)} /></div>
+                
                 <input type='button' value='-' onClick={this.removeClick.bind(this, i)} />
             </div>
         ))
@@ -30,22 +36,25 @@ class TestComp extends React.Component {
     }
 
     createQuestion() {
-        return this.state.question.map((el, i) => (
-            <div key={i}>
+        console.log(this.state);
+        this.setState(prevState => ({ question: [...prevState.question, "modified"]}));
+        console.log(this.state);
+        return (
+            <div>
 
-                <input placeholder="Add a question" name="question" value={el.question || ''} onChange={this.handleChange.bind(this, i)} />
-                <input type='button' value='-' onClick={this.removeClick.bind(this, i)} />
+                <input placeholder="Add a question" name="question" value={this.state.question}  />
+                
             </div>
-        ))
+        )
     }
 
     createAnswer() {
-        return this.state.answer.map((el, i) => (
-            <div key={i}>
+        /* return this.state.answer.map((el, i) => (
+            { <div key={i}>
                 <input placeholder="Add an Answer" name="answer" value={el.answer || ''} onChange={this.handleChange.bind(this, i)} />
                 <input type='button' value='-' onClick={this.removeClick.bind(this, i)} />
-            </div>
-        ))
+            </div> 
+        )) */
     }
 
     handleChange(i, e) {
@@ -77,11 +86,21 @@ class TestComp extends React.Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit}>
-                {this.createQuestionSet()}
-                {this.createQuestion()}
-                {this.createAnswer()}
+                <div>
+                <div>
+                <div><input placeholder="Add a question set" name="questionset" value={this.state.questionset } /></div>
+                <div><input placeholder="Add a question" name="question" value={this.state.question}/>
+                <button type="button" onClick={this.createQuestion.bind(this)}> + </button><button type="button"> - </button>
+                </div>
+                <div><input placeholder="Add an Answer" name="answer" value={this.state.answer} /></div>
+                
+                <input type='button' value='-' onClick={this.removeClick.bind(this)} />
+            </div>
+                </div>
+                
                 <input type='button' value='add more' onClick={this.addClick.bind(this)} />
                 <input type="submit" value="Submit" />
+                
             </form>
         );
     }
