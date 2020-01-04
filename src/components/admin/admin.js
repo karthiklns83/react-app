@@ -6,12 +6,17 @@ import './admin.css'
 import { render } from '@testing-library/react';
 
 class Admin extends React.Component{
-
-    state = { values: [{ value: null }], 
-    answers: [{value: null}], 
-    set: [{value: null}],
+    constructor(props){
+        super(props);
+    this.state = { values: [{ value: 0 }], 
+    answers: [{answer: 0}], 
+    set: [{value: 0}],
     setCount: 0
 };
+this.handleChange = this.handleChange.bind(this);
+this.handleSubmit = this.handleSubmit.bind(this);
+this.buildJSON = this.buildJSON.bind(this);
+    }
 
   createUI() {
     return this.state.values.map((el, i) => (
@@ -36,12 +41,19 @@ class Admin extends React.Component{
     this.setState({ values });
   }
 
-  addSetClick(){
+  handleAnswerChange(i, event){
+    let answers = [...this.state.answers];
+    answers[i].answer = event.target.value;
+    this.setState({ answers });
+
+  }
+
+  addSetClick(i){
     this.setState(prevState => ({
+        setCount: i+1,
         values: [...prevState.values, { value: null }],
         answers: [...prevState.answers, { value: null }]
       }));
-
   }
 
   addClick() {
@@ -77,20 +89,33 @@ class Admin extends React.Component{
 
   }
 
-  handleSubmit(event) {
-    alert("A name was submitted: " + this.state.values.join(", "));
+  buildJSON(){
+      for(let arrVal=0; arrVal < (this.state.values).length; arrVal++){
+          var questions = JSON.parse(this.state.values[arrVal].value);
+          var answerset = JSON.parse(this.state.answers[arrVal].answer);
+          //var questionset = this.state.setCount + arrVal;
+          //return {questions, answerset, questionset};
+          console.log("questions " +questions);
+          console.log("answers" + answerset);
+      }      
+  }
+
+  handleSubmit = (event) => {
+    this.state.setCount = this.state.setCount+1;
+      //alert(JSON.stringify(this.state));
+      let requestPayload = this.buildJSON();
+      //console.log(requestPayload);
     event.preventDefault();
   }
 
   render() {
+      //console.log("inside render" + JSON.stringify(this.state));
     return (
       <form onSubmit={this.handleSubmit}>
           
         {this.state.values.map((el, i) => (
-            <div>
-            <label >Question-set-{i+1}</label>
+            <div>            
           <div key={i}>
-              
             <input
               type="text"
               placeholder = "question"
@@ -106,12 +131,13 @@ class Admin extends React.Component{
           </div></div>
         ))}
         {this.state.answers.map((el, i) => (
+            <div>
           <div key={i}>
             <input
               type="text"
               placeholder = "answer"
-              value={el.value || ""}
-              onChange={e => this.handleChange(i, e)}
+              value={el.answer || ""}
+              onChange={e => this.handleAnswerChange(i, e)}
             />
             <input type="button" value="Add Answer" onClick={() => this.addAnswerClick()} />
             <input
@@ -120,10 +146,12 @@ class Admin extends React.Component{
               onClick={() => this.removeAnswerClick(i)}
             />
           </div>
+          </div>
         ))}
+  <label >Question-set-{this.state.setCount+1}</label>
         {this.state.set.map((val, index) => (
             <div>
-        <input type="button" value="Add set" onClick={() => this.addSetClick()} />
+        <input type="button" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
         <input type="button" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
         ))}
         
