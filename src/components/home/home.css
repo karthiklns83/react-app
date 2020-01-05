@@ -1,12 +1,7 @@
-.homeTitle{
-    border: 0.2rem solid indigo;
-    width: 25rem;
+.navbar{
+    float: left;
 }
 
-.buttonProp{
-    display: block ;
-    width: 20rem;
-    height: 4rem;
-    padding: 1rem;
-    margin: 1rem;
+.home{
+    height: 30rem;
 }

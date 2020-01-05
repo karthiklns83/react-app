@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../header/header';
 import Footer from '../footer/footer';
+import Nav from '../nav/nav';
 import { Link } from 'react-router-dom';
 import './home.css';
 
@@ -9,23 +10,9 @@ class Home extends React.Component{
         return(
             <div>
             <Header />
-            <div className="homeTitle">
-                <Link to='/home'>
-            <button className="buttonProp">Home</button>
-            </Link>
-                
-                <Link to='/admin'>
-            <button className="buttonProp">Manage Question Set</button>
-            </Link>
-
-            <Link to='/settings'>
-            <button className="buttonProp">Account Settings</button>
-            </Link>
-            
-            <Link to='/logout'>
-                <button className="buttonProp">LogOut</button>
-            </Link>
-            </div>
+            <div className="navbar">
+            <Nav /></div>
+            <div className="home">Home page content goes here</div>
             <Footer />
             </div>
         );

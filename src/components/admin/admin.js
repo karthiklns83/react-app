@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../header/header';
 import Footer from '../footer/footer';
+import Nav from '../nav/nav';
 import QuestionSet from '../questionset/questionset'
 import './admin.css'
 import { render } from '@testing-library/react';
@@ -152,6 +153,11 @@ class Admin extends React.Component {
 
     render() {
         return (
+            <div className="Topic">
+                <Header />
+                <div className="navbar">
+                <Nav /></div>
+                <div className="bodyAdmin">
             <form onSubmit={this.handleSubmit}>
                 {this.state.values.map((el, i) => (
                     <div>
@@ -196,6 +202,9 @@ class Admin extends React.Component {
                 ))}
                 <input type="submit" value="Submit" />
             </form>
+            </div>
+            <Footer />
+            </div>
         );
     }
 }

@@ -1,0 +1,13 @@
+.homeTitle{
+    border: 0.1rem solid indigo;
+    width: 25rem;
+}
+
+.buttonProp{
+    display: block ;
+    width: 20rem;
+    height: 4rem;
+    padding: 3rem;
+    margin: 1rem;
+    font-size: 1.2rem;
+}

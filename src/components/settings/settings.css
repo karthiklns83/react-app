@@ -1,5 +1,9 @@
 .settings{
     font-size: 1rem;
     align-content: right;
-    height: 25rem;
+    height: 31rem;
+}
+
+.navbar{
+    float: left;
 }
