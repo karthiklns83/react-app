@@ -197,8 +197,8 @@ class Admin extends React.Component {
                 <label >Question-set-{this.state.setCount + 1}</label>
                 {this.state.set.map((val, index) => (
                     <div>
-                        <input type="button" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
-                        <input type="button" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
+                        <input type="button" className="btnAction" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
+                        <input type="button" className="btnAction" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
                 ))}
                 <input type="submit" value="Submit" />
             </form>
