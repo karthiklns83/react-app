@@ -2,9 +2,11 @@ import React from 'react';
 import Header from '../header/header';
 import Footer from '../footer/footer';
 import Nav from '../nav/nav';
+import SaveInfo from '../../api/authUser';
 import QuestionSet from '../questionset/questionset'
 import './admin.css'
 import { render } from '@testing-library/react';
+var fs = require('fs');
 
 class Admin extends React.Component {
     constructor(props) {
@@ -29,7 +31,7 @@ class Admin extends React.Component {
         this.getTrainingResponse = this.getTrainingResponse.bind(this);
     }
 
-    createUI() {
+    /* createUI() {
         return this.state.values.map((el, i) => (
             <div key={i}>
                 <input
@@ -44,6 +46,12 @@ class Admin extends React.Component {
                 />
             </div>
         ));
+    } */
+
+    componentDidMount(){
+        var data = SaveInfo.readQuestion();
+        this.setState({object: JSON.stringify(data)});
+        console.log("read data frm file" + (this.state.object));
     }
 
     handleChange(i, event) {
@@ -148,6 +156,11 @@ class Admin extends React.Component {
     handleSubmit = (event) => {
         let requestPayload = this.buildJSON();
         console.log("final payload" + JSON.stringify(requestPayload));
+       /*  var savedInfo = SaveInfo.saveQuestionSet(requestPayload);
+        if (savedInfo){
+                console.log(savedInfo);
+                alert("Save done"); */
+       // }
         event.preventDefault();
     }
 
