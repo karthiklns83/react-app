@@ -9,11 +9,17 @@ class Admin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            values: [{ value: 0 }],
-            answers: [{ answer: 0 }],
-            set: [{ value: 0 }],
+            values: [{ value: null }],
+            answers: [{ answer: null }],
+            set: [{ value: null }],
+            questionnaire: [{ question: [], answer: [] }],
             setCount: 0
         };
+        // Questionnaire.questionSet[0].question.push("11");
+        // Questionnaire.questionSet[0].answer.push("11");
+        // Questionnaire.questionSet[1].question.push("11");
+        // Questionnaire.questionSet[1].answer.push("11");
+
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.buildJSON = this.buildJSON.bind(this);
@@ -41,23 +47,31 @@ class Admin extends React.Component {
 
     handleChange(i, event) {
         let values = [...this.state.values];
+        console.log("i value" + i + " Que event" + event.target.value);
         values[i].value = event.target.value;
         this.setState({ values });
     }
 
     handleAnswerChange(i, event) {
         let answers = [...this.state.answers];
+        console.log("i value" + i + "Ans event" + event.target.value);
         answers[i].answer = event.target.value;
         this.setState({ answers });
 
     }
 
     addSetClick(i) {
-        this.setState(prevState => ({
-            setCount: i + 1,
-            values: [...prevState.values, { value: null }],
-            answers: [...prevState.answers, { value: null }]
-        }));
+        console.log("i val inside addset func " + i);
+        // Questionnaire.questionSet[0].question.push("11");
+        // Questionnaire.questionSet[0].answer.push("11");
+        this.setState(prevState => (
+            {
+                setCount: i + 1,
+                //Questionnaire: [prevState.Questionnaire,{ value: null}]
+                //Questionnaire: [...prevState.Questionnaire.questionSet[i+1].answer,{ value: null}]
+                values: [...prevState.values, { value: null }],
+                answers: [...prevState.answers, { value: null }]
+            }));
     }
 
     addClick() {
@@ -93,70 +107,52 @@ class Admin extends React.Component {
 
     }
 
-    getDisplayName(total) {
-        let arrVal;
+    getDisplayName(current, total) {
         var displayname = "Q-";
-        for (arrVal = 0; arrVal < total; arrVal++) {
-            displayname = displayname + (arrVal + 1) + "-" + total;
-            console.log(displayname);
-            return displayname;
-
-        }
+        displayname = displayname + (current + 1) + "-" + total;
+        console.log(displayname);
+        return displayname;
     }
 
-    getTrainingParts(trainingpartslength) {
-        let arrVal;
-        for (arrVal = 0; arrVal < trainingpartslength; arrVal++) {
-            console.log([JSON.parse(this.state.values[arrVal].value)]);
-            return [JSON.parse(this.state.values[arrVal].value)]
-        }
-
-    }
-
-    getTrainingResponse(trainingpartslength) {
-        let arrVal;
-        for (arrVal = 0; arrVal < trainingpartslength; arrVal++) {
-            console.log([JSON.parse(this.state.answers[arrVal].answer)]);
-            return [JSON.parse(this.state.answers[arrVal].answer)]
-        }
-
-    }
+     getTrainingParts(index) {
+             return (this.state.values[index].value).split(',')
+     }
+ 
+     getTrainingResponse(index) {
+             return (this.state.answers[index].answer).split(',')
+     }
 
     buildJSON() {
         let payLoad;
         var questionsLength = this.state.values.length;
+
+        payLoad = {
+            appList: [{
+                appId: "hardcodednow",
+                appName: "Noah",
+                intentList: []
+            }]
+        }
         for (let arr = 0; arr < questionsLength; arr++) {
-            payLoad = {
-                appList: [{
-                    appId: "hardcodednow",
-                    appName: "Noah",
-                    intentList: [{
-                        id_intent: "",
-                        displayName: this.getDisplayName(questionsLength),
-                        trainingParts: this.getTrainingParts(questionsLength),
-                        trainingResponse: this.getTrainingResponse(questionsLength),
-                        setcount: this.state.setCount + 1
-                    }]
-                }]
-            }
-            //console.log("payload is" +JSON.stringify(payLoad));
-        } return payLoad;
+            payLoad.appList[0].intentList.push({
+                id_intent: "",
+                displayName: this.getDisplayName(arr, questionsLength),
+                trainingParts: this.getTrainingParts(arr),
+                trainingResponse: this.getTrainingResponse(arr)
+            })
+        }
+        return payLoad;
     }
 
     handleSubmit = (event) => {
-        //this.state.setCount = this.state.setCount+1;
-
         let requestPayload = this.buildJSON();
-        //alert(requestPayload);
         console.log("final payload" + JSON.stringify(requestPayload));
         event.preventDefault();
     }
 
     render() {
-        //console.log("inside render" + JSON.stringify(this.state));
         return (
             <form onSubmit={this.handleSubmit}>
-
                 {this.state.values.map((el, i) => (
                     <div>
                         <div key={i}>
@@ -198,9 +194,7 @@ class Admin extends React.Component {
                         <input type="button" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
                         <input type="button" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
                 ))}
-
                 <input type="submit" value="Submit" />
-
             </form>
         );
     }
