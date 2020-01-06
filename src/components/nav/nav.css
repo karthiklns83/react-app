@@ -6,15 +6,16 @@
 
 .buttonProp{
     display: block ;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    width: 20rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+    width: 15rem;
     height: 2rem;
     padding: 1rem;
     font-size: 1.2rem;
     color: white;
-    font-weight: bold;
+    font-weight: normal;
     background-color: #3498db;
+    text-align: center;
 }
 
 .link{

@@ -29,7 +29,23 @@ Axios.defaults.headers.common = {
   }
 
   static readQuestion(){
-     var data = {
+    let config = {
+        headers: {
+           'Content-Type': 'application/x-www-form-urlencoded',
+        } 
+   }
+Axios.defaults.headers.common = {
+    'Content-Type': 'application/json',
+ } 
+    return new Promise((resolve, reject) => {
+        Axios.post('http://localhost:2021/googapi/get', config ).then(response => {
+            resolve(response);
+        }).catch(err => {
+            reject(err);
+        })
+    })
+      
+     /* var data = {
       "appList": [
           {
               "appId": "hardcodednow",
@@ -67,7 +83,7 @@ Axios.defaults.headers.common = {
       ]
   }
   data = "";
-      return JSON.stringify(data);
+      return JSON.stringify(data); */
   }
 
   static saveQuestionSet(questionPayLoad){

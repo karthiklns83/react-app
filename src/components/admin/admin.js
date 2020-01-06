@@ -18,6 +18,7 @@ class Admin extends React.Component {
             set: [{ value: null }],
             questionnaire: [{ question: [], answer: [] }],
             setCount: 0,
+            appList: [],
             intentList: []
         };
         // Questionnaire.questionSet[0].question.push("11");
@@ -51,14 +52,19 @@ class Admin extends React.Component {
     } */
 
     componentDidMount() {
-        try{
-        var data = SaveInfo.readQuestion();
-        data = JSON.parse(data);
-        this.setState({intentList: data.appList[0].intentList});   
-        }
-        catch(e)           {
-            this.setState({ intentList : 
-         [
+        var data;
+        SaveInfo.readQuestion().then(response => {
+            response = JSON.stringify(response);
+            response = JSON.parse(response);
+            if (response.status == 200 ) {
+                if(response.data == "") return false;
+                 console.log(response);
+                this.setState({ intentList: response.data.appList[0].intentList });
+            }
+            else {
+                this.setState({
+                    intentList:
+                        [
                             {
                                 "id_intent": "",
                                 "displayName": "",
@@ -68,14 +74,15 @@ class Admin extends React.Component {
                                 ]
                             }
                         ]
-            })
-        }
+                })
+            }
+        });
     }
 
     handleChange(i, event) {
         let intentList = [...this.state.intentList];
         intentList[i].trainingParts = event.target.value;
-        this.setState({intentList})
+        this.setState({ intentList })
     }
 
     handleAnswerChange(i, event) {
@@ -118,7 +125,7 @@ class Admin extends React.Component {
         let intentList = [...this.state.intentList];
         intentList.splice(index, 1);
         //trainingResponse.splice(index, 1);
-        this.setState({intentList });
+        this.setState({ intentList });
     }
 
     removeAnswerClick(i) {
@@ -161,7 +168,7 @@ class Admin extends React.Component {
                 id_intent: "",
                 displayName: this.getDisplayName(arr, questionsLength),
                 trainingParts: this.getTrainingParts(arr),
-                trainingResponse: this.getTrainingResponse(arr)   
+                trainingResponse: this.getTrainingResponse(arr)
             })
         }
         return payLoad;
@@ -172,10 +179,10 @@ class Admin extends React.Component {
         console.log("final payload" + JSON.stringify(requestPayload));
         SaveInfo.saveQuestionSet(requestPayload).then(response => {
             console.log(response);
-            if(response.status == 200){
+            if (response.status == 200) {
                 alert("saved");
             }
-            else{
+            else {
                 alert("failed")
             }
         })
@@ -194,8 +201,8 @@ class Admin extends React.Component {
                         {this.state.intentList.map((el, i) => (
                             <div>
                                 <div key={i} className="container">
-                                <label className="quelabel">Questionset-{i + 1}</label>
-                                <div className="rowseparator"></div>
+                                    <label className="quelabel">Questionset-{i + 1}</label>
+                                    <div className="rowseparator"></div>
                                     <textarea cols="50" rows="4"
                                         type="text"
                                         spellCheck="false"
@@ -214,13 +221,13 @@ class Admin extends React.Component {
                                         onChange={e => this.handleAnswerChange(i, e)}
                                     />
                                 </div></div>
-                        ))}                        
+                        ))}
                         {this.state.set.map((val, index) => (
                             <div>
                                 <input type="button" className="btnAction" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
                                 <input type="button" className="btnAction" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
                         ))}
-                        <input type="submit" value="Save Questionset" className="btnSubmit"/>
+                        <input type="submit" value="Save Questionset" className="btnSubmit" />
                     </form>
                 </div>
                 <Footer />

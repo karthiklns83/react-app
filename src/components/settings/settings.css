@@ -1,9 +1,10 @@
 .settings{
-    font-size: 1rem;
-    align-content: right;
+    align-content: center;
     height: 31rem;
     color: white;
-    margin-left: 26rem;
+    margin-left: 40rem;
+    font-size: 2rem;
+    margin-top: 10rem;
 }
 
 .navbar{

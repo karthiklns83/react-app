@@ -12,7 +12,7 @@ class Home extends React.Component{
             <Header />
             <div className="navbar">
             <Nav /></div>
-            <div className="home">Home page content goes here</div>
+            <div className="home">Welcome to Noah Voice Assistant App</div>
             <Footer />
             </div>
         );

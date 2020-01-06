@@ -3,7 +3,10 @@
 }
 
 .home{
+    margin-top: 5rem;
+    align-content: center;
     height: 30rem;
     color: white;
     margin-left: 26rem;
+    font-size: 2rem;
 }

@@ -13,7 +13,7 @@ class Settings extends React.Component{
                     <Nav />
                 </div>
             <div className="settings">
-                List of the API routes being used, will go here.
+                Coming soon...
             </div>
             <Footer />
             </div>
