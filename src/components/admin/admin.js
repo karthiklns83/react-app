@@ -6,14 +6,15 @@ import SaveInfo from '../../api/authUser';
 import QuestionSet from '../questionset/questionset'
 import './admin.css'
 import { render } from '@testing-library/react';
+import { read } from 'fs';
 var fs = require('fs');
 
 class Admin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            values: [{ value: null }],
-            answers: [{ answer: null }],
+            trainingParts: [{ value: null }],
+            trainingResponse: [{ answer: null }],
             set: [{ value: null }],
             questionnaire: [{ question: [], answer: [] }],
             setCount: 0
@@ -32,7 +33,7 @@ class Admin extends React.Component {
     }
 
     /* createUI() {
-        return this.state.values.map((el, i) => (
+        return this.state.trainingParts.map((el, i) => (
             <div key={i}>
                 <input
                     type="text"
@@ -49,23 +50,74 @@ class Admin extends React.Component {
     } */
 
     componentDidMount(){
-        var data = SaveInfo.readQuestion();
-        this.setState({object: JSON.stringify(data)});
-        console.log("read data frm file" + (this.state.object));
+        var data = {
+            "appList": [
+                {
+                    "appId": "hardcodednow",
+                    "appName": "Noah",
+                    "intentList": [
+                        {
+                            "id_intent": "",
+                            "displayName": "Q-1-2",
+                            "trainingParts": [
+                                "q1",
+                                "q2",
+                                "q3"
+                            ],
+                            "trainingResponse": [
+                                "a1",
+                            ]
+                        },
+                        {
+                            "id_intent": "",
+                            "displayName": "Q-2-2",
+                            "trainingParts": [
+                                "q4",
+                                "q5"
+                            ],
+                            "trainingResponse": [
+                                "a2",
+                                "a3",
+                                "a4",
+                                "a5",
+                                "a6",
+                                "a7"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+        var data = JSON.stringify(data);
+        var data = JSON.parse(data);
+        console.log(data);
+        var intentLength = data.appList[0].intentList.length;
+        var intent;
+        for (intent = 0; intent < intentLength; intent++){
+            this.setState(prevState => (
+                {
+                    trainingResponse : [...prevState.trainingResponse, {value: data.appList[0].intentList[0].trainingResponse }],
+                    trainingParts: [...prevState.trainingParts, { value: data.appList[0].intentList[0].trainingParts }]
+                    
+                }));
+        }
+            
+        
+        //this.setState({});
     }
 
     handleChange(i, event) {
-        let values = [...this.state.values];
+        let trainingParts = [...this.state.trainingParts];
         console.log("i value" + i + " Que event" + event.target.value);
-        values[i].value = event.target.value;
-        this.setState({ values });
+        trainingParts[i].value = event.target.value;
+        this.setState({ trainingParts });
     }
 
     handleAnswerChange(i, event) {
-        let answers = [...this.state.answers];
+        let trainingResponse = [...this.state.trainingResponse];
         console.log("i value" + i + "Ans event" + event.target.value);
-        answers[i].answer = event.target.value;
-        this.setState({ answers });
+        trainingResponse[i].answer = event.target.value;
+        this.setState({ trainingResponse });
 
     }
 
@@ -78,41 +130,41 @@ class Admin extends React.Component {
                 setCount: i + 1,
                 //Questionnaire: [prevState.Questionnaire,{ value: null}]
                 //Questionnaire: [...prevState.Questionnaire.questionSet[i+1].answer,{ value: null}]
-                values: [...prevState.values, { value: null }],
-                answers: [...prevState.answers, { value: null }]
+                trainingParts: [...prevState.trainingParts, { value: null }],
+                trainingResponse: [...prevState.trainingResponse, { value: null }]
             }));
     }
 
     addClick() {
         this.setState(prevState => ({
-            values: [...prevState.values, { value: null }]
+            trainingParts: [...prevState.trainingParts, { value: null }]
         }));
     }
 
     addAnswerClick() {
         this.setState(prevState => ({
-            answers: [...prevState.answers, { value: null }]
+            trainingResponse: [...prevState.trainingResponse, { value: null }]
         }));
     }
 
     removeClick(i) {
-        let values = [...this.state.values];
-        values.splice(i, 1);
-        this.setState({ values });
+        let trainingParts = [...this.state.trainingParts];
+        trainingParts.splice(i, 1);
+        this.setState({ trainingParts });
     }
 
     removeSetClick(index) {
-        let values = [...this.state.values];
-        let answers = [...this.state.answers];
-        values.splice(index, 1);
-        answers.splice(index, 1);
-        this.setState({ values, answers });
+        let trainingParts = [...this.state.trainingParts];
+        let trainingResponse = [...this.state.trainingResponse];
+        trainingParts.splice(index, 1);
+        trainingResponse.splice(index, 1);
+        this.setState({ trainingParts, trainingResponse });
     }
 
     removeAnswerClick(i) {
-        let answers = [...this.state.answers];
-        answers.splice(i, 1);
-        this.setState({ answers });
+        let trainingResponse = [...this.state.trainingResponse];
+        trainingResponse.splice(i, 1);
+        this.setState({ trainingResponse });
 
     }
 
@@ -124,16 +176,16 @@ class Admin extends React.Component {
     }
 
      getTrainingParts(index) {
-             return (this.state.values[index].value).split(',')
+             return (this.state.trainingParts[index].value).split(',')
      }
  
      getTrainingResponse(index) {
-             return (this.state.answers[index].answer).split(',')
+             return (this.state.trainingResponse[index].answer).split(',')
      }
 
     buildJSON() {
         let payLoad;
-        var questionsLength = this.state.values.length;
+        var questionsLength = this.state.trainingParts.length;
 
         payLoad = {
             appList: [{
@@ -172,7 +224,7 @@ class Admin extends React.Component {
                 <Nav /></div>
                 <div className="bodyAdmin">
             <form onSubmit={this.handleSubmit}>
-                {this.state.values.map((el, i) => (
+                {this.state.trainingParts.map((el, i) => (
                     <div>
                         <div key={i}>
                             <input
@@ -189,7 +241,7 @@ class Admin extends React.Component {
                             />
                         </div></div>
                 ))}
-                {this.state.answers.map((el, i) => (
+                {this.state.trainingResponse.map((el, i) => (
                     <div>
                         <div key={i}>
                             <input
