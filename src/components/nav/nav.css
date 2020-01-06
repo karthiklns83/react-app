@@ -1,13 +1,31 @@
 .homeTitle{
-    border: 0.1rem solid indigo;
-    width: 25rem;
+    width: 22rem;
+    background-color: black;
+    height: 29rem;
 }
 
 .buttonProp{
     display: block ;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     width: 20rem;
-    height: 4rem;
-    padding: 3rem;
-    margin: 1rem;
+    height: 2rem;
+    padding: 1rem;
     font-size: 1.2rem;
+    color: white;
+    font-weight: bold;
+    background-color: #3498db;
+}
+
+.link{
+    text-decoration: none;
+}
+
+.link:hover{
+    background-color: turquoise;
+
+}
+.buttoncontrol{
+    padding-top: 1rem;
+    padding-bottom: 0.3rem;
 }

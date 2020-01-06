@@ -1,7 +1,9 @@
 .footer{
-    border: 0.2rem solid indigo;
     height: 6rem;
     width: 100%;
     text-align: left;
     font-size: 1rem;
+    color: white;
+    background-color: #3498db;
+    margin-top: 20rem;
 }

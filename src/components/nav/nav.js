@@ -6,22 +6,26 @@ class Home extends React.Component{
     render(){
         return(
             <div>
-            <div className="homeTitle">
-                <Link to='/home'>
-            <button className="buttonProp">Home</button>
+                <div className="homeTitle">
+                    <div className="buttoncontrol">
+                <Link to='/home' className="link">
+                    <div className="buttonProp">Home</div>
+                    </Link>
+                    </div>
+                    <div className="buttoncontrol">
+                <Link to='/admin' className="link">
+                <div className="buttonProp">Admin</div>
             </Link>
-                
-                <Link to='/admin'>
-            <button className="buttonProp">Manage Question Set</button>
+            </div>
+            <div className="buttoncontrol">
+            <Link to='/settings' className="link">
+            <div className="buttonProp">Settings</div>
             </Link>
-
-            <Link to='/settings'>
-            <button className="buttonProp">Account Settings</button>
-            </Link>
-            
-            <Link to='/logout'>
-                <button className="buttonProp">LogOut</button>
-            </Link>
+            </div>
+            <div className="buttoncontrol">
+            <Link to='/logout' className="link">
+            <div className="buttonProp">Logout</div>
+            </Link></div>
             </div>
             </div>
         );

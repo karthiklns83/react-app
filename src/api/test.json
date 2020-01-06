@@ -9,26 +9,27 @@
                     "displayName": "Q-1-2",
                     "trainingParts": [
                         "q1",
-                        "q1-2",
-                        "q1-3"
+                        "q2",
+                        "q3"
                     ],
                     "trainingResponse": [
-                        "a1",
-                        "a1-2",
-                        "a1-3",
-                        "a1-4",
-                        "a1-5"
+                        "a1"
                     ]
                 },
                 {
                     "id_intent": "",
                     "displayName": "Q-2-2",
                     "trainingParts": [
-                        "q2-1",
-                        "q2-2"
+                        "q4",
+                        "q5"
                     ],
                     "trainingResponse": [
-                        "a2-1"
+                        "a2",
+                        "a3",
+                        "a4",
+                        "a5",
+                        "a6",
+                        "a7"
                     ]
                 }
             ]

@@ -2,15 +2,47 @@
     float: left;
   }
 
+  .textbox{
+    background-color: beige;
+  }
+
   .bodyAdmin{
     display: block;
     height: 30rem;
     margin-top: 0.1rem;
     margin-left: 26rem;
-    border: 0.1rem solid indigo;
   }
 
   .btnAction{
     height: 3rem;
     width: 8rem;
+    color: white;
+    background-color: #3498db;
+    border-radius: 0.2rem;
+    font-size: 0.9rem;
+    margin-left: 3rem;
+  }
+
+  .rowseparator{
+    margin-top: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .quelabel{
+    color: white;
+  }
+
+  .btnSubmit{
+    margin-top: 0.8rem;
+    height: 3rem;
+    width: 8rem;
+    color: white;
+    background-color: #3498db;
+    border-radius: 0.2rem;
+    margin-left: 8rem;
+    font-size: 0.9rem;
+  }
+
+  .container{
+    margin: 0.5rem;
   }

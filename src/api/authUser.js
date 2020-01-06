@@ -1,15 +1,31 @@
+import { resolve } from 'dns';
+import Axios from 'axios';
+
 const fs = require('fs');
 
 class authUser {
 
-static validateUser(){
-    return (
-      {
-        "accountid" : "12abcd",
-        "username": "admin",
-        "password": "admin"
-    }
-    );
+static validateUser(uid, aid, pwd){
+    let config = {
+        headers: {
+           'Content-Type': 'application/x-www-form-urlencoded',
+        } 
+   }
+   var params = {
+    accountId: aid,
+    userId: uid,
+    password: pwd
+}
+Axios.defaults.headers.common = {
+    'Content-Type': 'application/json',
+ } 
+    return new Promise((resolve, reject) => {
+        Axios.post('http://localhost:2021/user', params, config ).then(response => {
+            resolve(response);
+        }).catch(err => {
+            reject(err);
+        })
+    })
   }
 
   static readQuestion(){
@@ -20,7 +36,7 @@ static validateUser(){
               "appName": "Noah",
               "intentList": [
                   {
-                      "id_intent": "",
+                      "id_intent": "1",
                       "displayName": "Q-1-2",
                       "trainingParts": [
                           "q1",
@@ -50,21 +66,25 @@ static validateUser(){
           }
       ]
   }
-  //data = "";
+  data = "";
       return JSON.stringify(data);
   }
 
   static saveQuestionSet(questionPayLoad){
-    fs.writeFile('./questionSet.json', JSON.stringify(questionPayLoad, null, 4), (err) => {
-        if (err) {
-          console.log(err) 
-          return false; 
-        }
-        else
-        {
-        console.log("Write to File successful");
-        return true 
-      }
+    let config = {
+        headers: {
+           'Content-Type': 'application/x-www-form-urlencoded',
+        } 
+   }
+Axios.defaults.headers.common = {
+    'Content-Type': 'application/json',
+ } 
+    return new Promise((resolve, reject) => {
+        Axios.post('http://localhost:2021/googapi/insert', questionPayLoad, config ).then(response => {
+            resolve(response);
+        }).catch(err => {
+            reject(err);
+        })
     })
 
   }

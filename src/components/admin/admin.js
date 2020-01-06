@@ -170,11 +170,15 @@ class Admin extends React.Component {
     handleSubmit = (event) => {
         let requestPayload = this.buildJSON();
         console.log("final payload" + JSON.stringify(requestPayload));
-        /*  var savedInfo = SaveInfo.saveQuestionSet(requestPayload);
-         if (savedInfo){
-                 console.log(savedInfo);
-                 alert("Save done"); */
-        // }
+        SaveInfo.saveQuestionSet(requestPayload).then(response => {
+            console.log(response);
+            if(response.status == 200){
+                alert("saved");
+            }
+            else{
+                alert("failed")
+            }
+        })
         event.preventDefault();
     }
 
@@ -189,11 +193,13 @@ class Admin extends React.Component {
                     <form onSubmit={this.handleSubmit}>
                         {this.state.intentList.map((el, i) => (
                             <div>
-                                <div key={i}>
-                                <label >Question-set-{i + 1}</label>
-                                <br />
+                                <div key={i} className="container">
+                                <label className="quelabel">Questionset-{i + 1}</label>
+                                <div className="rowseparator"></div>
                                     <textarea cols="50" rows="4"
                                         type="text"
+                                        spellCheck="false"
+                                        className="textbox"
                                         placeholder="question"
                                         value={el.trainingParts || ""}
                                         onChange={e => this.handleChange(i, e)}
@@ -201,6 +207,8 @@ class Admin extends React.Component {
                                     <br />
                                     <textarea cols="50" rows="4"
                                         type="text"
+                                        spellCheck="false"
+                                        className="textbox"
                                         placeholder="answer"
                                         value={el.trainingResponse || ""}
                                         onChange={e => this.handleAnswerChange(i, e)}
@@ -212,7 +220,7 @@ class Admin extends React.Component {
                                 <input type="button" className="btnAction" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
                                 <input type="button" className="btnAction" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
                         ))}
-                        <input type="submit" value="Submit" />
+                        <input type="submit" value="Save Questionset" className="btnSubmit"/>
                     </form>
                 </div>
                 <Footer />
