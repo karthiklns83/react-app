@@ -50,7 +50,8 @@ static validateUser(){
           }
       ]
   }
-      return data;
+  //data = "";
+      return JSON.stringify(data);
   }
 
   static saveQuestionSet(questionPayLoad){

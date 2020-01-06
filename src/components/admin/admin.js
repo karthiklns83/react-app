@@ -17,7 +17,8 @@ class Admin extends React.Component {
             trainingResponse: [{ answer: null }],
             set: [{ value: null }],
             questionnaire: [{ question: [], answer: [] }],
-            setCount: 0
+            setCount: 0,
+            intentList: []
         };
         // Questionnaire.questionSet[0].question.push("11");
         // Questionnaire.questionSet[0].answer.push("11");
@@ -49,89 +50,49 @@ class Admin extends React.Component {
         ));
     } */
 
-    componentDidMount(){
-        var data = {
-            "appList": [
-                {
-                    "appId": "hardcodednow",
-                    "appName": "Noah",
-                    "intentList": [
-                        {
-                            "id_intent": "",
-                            "displayName": "Q-1-2",
-                            "trainingParts": [
-                                "q1",
-                                "q2",
-                                "q3"
-                            ],
-                            "trainingResponse": [
-                                "a1",
-                            ]
-                        },
-                        {
-                            "id_intent": "",
-                            "displayName": "Q-2-2",
-                            "trainingParts": [
-                                "q4",
-                                "q5"
-                            ],
-                            "trainingResponse": [
-                                "a2",
-                                "a3",
-                                "a4",
-                                "a5",
-                                "a6",
-                                "a7"
-                            ]
-                        }
-                    ]
-                }
-            ]
+    componentDidMount() {
+        try{
+        var data = SaveInfo.readQuestion();
+        data = JSON.parse(data);
+        this.setState({intentList: data.appList[0].intentList});   
         }
-        var data = JSON.stringify(data);
-        var data = JSON.parse(data);
-        console.log(data);
-        var intentLength = data.appList[0].intentList.length;
-        var intent;
-        for (intent = 0; intent < intentLength; intent++){
-            this.setState(prevState => (
-                {
-                    trainingResponse : [...prevState.trainingResponse, {value: data.appList[0].intentList[0].trainingResponse }],
-                    trainingParts: [...prevState.trainingParts, { value: data.appList[0].intentList[0].trainingParts }]
-                    
-                }));
+        catch(e)           {
+            this.setState({ intentList : 
+         [
+                            {
+                                "id_intent": "",
+                                "displayName": "",
+                                "trainingParts": [
+                                ],
+                                "trainingResponse": [
+                                ]
+                            }
+                        ]
+            })
         }
-            
-        
-        //this.setState({});
     }
 
     handleChange(i, event) {
-        let trainingParts = [...this.state.trainingParts];
-        console.log("i value" + i + " Que event" + event.target.value);
-        trainingParts[i].value = event.target.value;
-        this.setState({ trainingParts });
+        let intentList = [...this.state.intentList];
+        intentList[i].trainingParts = event.target.value;
+        this.setState({intentList})
     }
 
     handleAnswerChange(i, event) {
-        let trainingResponse = [...this.state.trainingResponse];
-        console.log("i value" + i + "Ans event" + event.target.value);
-        trainingResponse[i].answer = event.target.value;
-        this.setState({ trainingResponse });
+        let intentList = [...this.state.intentList];
+        intentList[i].trainingResponse = event.target.value;
+        this.setState({ intentList });
 
     }
 
     addSetClick(i) {
         console.log("i val inside addset func " + i);
-        // Questionnaire.questionSet[0].question.push("11");
-        // Questionnaire.questionSet[0].answer.push("11");
         this.setState(prevState => (
             {
                 setCount: i + 1,
                 //Questionnaire: [prevState.Questionnaire,{ value: null}]
                 //Questionnaire: [...prevState.Questionnaire.questionSet[i+1].answer,{ value: null}]
-                trainingParts: [...prevState.trainingParts, { value: null }],
-                trainingResponse: [...prevState.trainingResponse, { value: null }]
+                intentList: [...prevState.intentList, { value: null }]
             }));
     }
 
@@ -154,11 +115,10 @@ class Admin extends React.Component {
     }
 
     removeSetClick(index) {
-        let trainingParts = [...this.state.trainingParts];
-        let trainingResponse = [...this.state.trainingResponse];
-        trainingParts.splice(index, 1);
-        trainingResponse.splice(index, 1);
-        this.setState({ trainingParts, trainingResponse });
+        let intentList = [...this.state.intentList];
+        intentList.splice(index, 1);
+        //trainingResponse.splice(index, 1);
+        this.setState({intentList });
     }
 
     removeAnswerClick(i) {
@@ -169,23 +129,25 @@ class Admin extends React.Component {
     }
 
     getDisplayName(current, total) {
-        var displayname = "Q-";
+        var displayname = "app1-Q-";
         displayname = displayname + (current + 1) + "-" + total;
         console.log(displayname);
         return displayname;
     }
 
-     getTrainingParts(index) {
-             return (this.state.trainingParts[index].value).split(',')
-     }
- 
-     getTrainingResponse(index) {
-             return (this.state.trainingResponse[index].answer).split(',')
-     }
+    getTrainingParts(index) {
+        var trainingpart = (this.state.intentList[index].trainingParts).replace(/\n/g, '')
+        return trainingpart.split(',')
+    }
+
+    getTrainingResponse(index) {
+        var trainingresponse = (this.state.intentList[index].trainingResponse).replace(/\n/g, '')
+        return trainingresponse.split(',')
+    }
 
     buildJSON() {
         let payLoad;
-        var questionsLength = this.state.trainingParts.length;
+        var questionsLength = this.state.intentList.length;
 
         payLoad = {
             appList: [{
@@ -199,7 +161,7 @@ class Admin extends React.Component {
                 id_intent: "",
                 displayName: this.getDisplayName(arr, questionsLength),
                 trainingParts: this.getTrainingParts(arr),
-                trainingResponse: this.getTrainingResponse(arr)
+                trainingResponse: this.getTrainingResponse(arr)   
             })
         }
         return payLoad;
@@ -208,67 +170,52 @@ class Admin extends React.Component {
     handleSubmit = (event) => {
         let requestPayload = this.buildJSON();
         console.log("final payload" + JSON.stringify(requestPayload));
-       /*  var savedInfo = SaveInfo.saveQuestionSet(requestPayload);
-        if (savedInfo){
-                console.log(savedInfo);
-                alert("Save done"); */
-       // }
+        /*  var savedInfo = SaveInfo.saveQuestionSet(requestPayload);
+         if (savedInfo){
+                 console.log(savedInfo);
+                 alert("Save done"); */
+        // }
         event.preventDefault();
     }
 
     render() {
+        console.log("inside render" + (this.state.intentList.length));
         return (
             <div className="Topic">
                 <Header />
                 <div className="navbar">
-                <Nav /></div>
+                    <Nav /></div>
                 <div className="bodyAdmin">
-            <form onSubmit={this.handleSubmit}>
-                {this.state.trainingParts.map((el, i) => (
-                    <div>
-                        <div key={i}>
-                            <input
-                                type="text"
-                                placeholder="question"
-                                value={el.value || ""}
-                                onChange={e => this.handleChange(i, e)}
-                            />
-                            <input type="button" value="Add Question" onClick={() => this.addClick()} />
-                            <input
-                                type="button"
-                                value="Remove Question"
-                                onClick={() => this.removeClick(i)}
-                            />
-                        </div></div>
-                ))}
-                {this.state.trainingResponse.map((el, i) => (
-                    <div>
-                        <div key={i}>
-                            <input
-                                type="text"
-                                placeholder="answer"
-                                value={el.answer || ""}
-                                onChange={e => this.handleAnswerChange(i, e)}
-                            />
-                            <input type="button" value="Add Answer" onClick={() => this.addAnswerClick()} />
-                            <input
-                                type="button"
-                                value="Remove Answer"
-                                onClick={() => this.removeAnswerClick(i)}
-                            />
-                        </div>
-                    </div>
-                ))}
-                <label >Question-set-{this.state.setCount + 1}</label>
-                {this.state.set.map((val, index) => (
-                    <div>
-                        <input type="button" className="btnAction" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
-                        <input type="button" className="btnAction" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
-                ))}
-                <input type="submit" value="Submit" />
-            </form>
-            </div>
-            <Footer />
+                    <form onSubmit={this.handleSubmit}>
+                        {this.state.intentList.map((el, i) => (
+                            <div>
+                                <div key={i}>
+                                <label >Question-set-{i + 1}</label>
+                                <br />
+                                    <textarea cols="50" rows="4"
+                                        type="text"
+                                        placeholder="question"
+                                        value={el.trainingParts || ""}
+                                        onChange={e => this.handleChange(i, e)}
+                                    />
+                                    <br />
+                                    <textarea cols="50" rows="4"
+                                        type="text"
+                                        placeholder="answer"
+                                        value={el.trainingResponse || ""}
+                                        onChange={e => this.handleAnswerChange(i, e)}
+                                    />
+                                </div></div>
+                        ))}                        
+                        {this.state.set.map((val, index) => (
+                            <div>
+                                <input type="button" className="btnAction" value="Add set" onClick={() => this.addSetClick(this.state.setCount)} />
+                                <input type="button" className="btnAction" value="Remove set" onClick={() => this.removeSetClick(index)} /></div>
+                        ))}
+                        <input type="submit" value="Submit" />
+                    </form>
+                </div>
+                <Footer />
             </div>
         );
     }
